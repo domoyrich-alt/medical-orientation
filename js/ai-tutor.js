@@ -7,7 +7,9 @@ class AITutor {
     constructor() {
         this.apiKey = null; // Set API key when ready
         this.conversationHistory = [];
-        this.useMockData = true; // Use mock data by default
+        // Configuration: Use mock data by default, can be overridden via config
+        // In production: new AITutor({ useMockData: false, apiKey: 'your-key' })
+        this.useMockData = true;
         this.initialize();
     }
 

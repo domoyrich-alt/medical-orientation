@@ -3110,15 +3110,17 @@
         
         window.addEventListener('DOMContentLoaded', () => {
             // Initialize International System (already initialized in module)
-            console.log('i18n initialized:', window.i18n);
+            if (window.i18n) {
+                // i18n initialized successfully
+            }
             
             // Initialize Gamification System
             gamificationSystem = new GamificationSystem();
-            console.log('Gamification system initialized');
+            // Gamification system initialized
             
             // Initialize Mobile PWA
             mobilePWA = new MobilePWA();
-            console.log('PWA initialized');
+            // PWA initialized
             
             // Add language selector to navigation if container exists
             const nav = document.querySelector('nav');

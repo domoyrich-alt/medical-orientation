@@ -87,27 +87,33 @@ self.addEventListener('fetch', (event) => {
 
 // Push notification event
 self.addEventListener('push', (event) => {
+    // TODO: Localize notification text based on user language preference
+    const data = event.data ? event.data.json() : {};
+    const title = data.title || 'Medical Orientation'; // Default title
+    const body = data.body || 'New notification'; // Default body
+    
     const options = {
-        body: event.data ? event.data.text() : 'Новое уведомление',
+        body: body,
         icon: '/icon-192x192.png',
         badge: '/badge-72x72.png',
         vibrate: [200, 100, 200],
         tag: 'medical-notification',
         requireInteraction: false,
+        data: data,
         actions: [
             {
                 action: 'open',
-                title: 'Открыть'
+                title: data.actionOpen || 'Open' // Localized by backend
             },
             {
                 action: 'close',
-                title: 'Закрыть'
+                title: data.actionClose || 'Close' // Localized by backend
             }
         ]
     };
 
     event.waitUntil(
-        self.registration.showNotification('Медицинская профориентация', options)
+        self.registration.showNotification(title, options)
     );
 });
 

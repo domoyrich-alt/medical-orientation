@@ -414,6 +414,8 @@ class MobilePWA {
      * Convert VAPID key
      */
     urlBase64ToUint8Array(base64String) {
+        // TODO: Replace with actual VAPID key from environment variables
+        // Example: const vapidKey = process.env.VAPID_PUBLIC_KEY || 'YOUR_VAPID_PUBLIC_KEY';
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
         const base64 = (base64String + padding)
             .replace(/\-/g, '+')

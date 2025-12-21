@@ -369,20 +369,26 @@ class InternationalSystem {
 
     /**
      * Pluralization helper
+     * Russian pluralization follows complex rules based on the last digit
      */
     plural(count, words) {
-        // Russian pluralization rules
+        // Russian pluralization rules:
+        // words[0] = singular (1 item: "тест")
+        // words[1] = few (2-4 items: "теста")
+        // words[2] = many (5+ items: "тестов")
         if (this.currentLanguage === 'ru') {
+            // Exception: numbers ending in 11-14 always use "many" form
+            // Regular rule: last digit 1 = singular, 2-4 = few, other = many
             const cases = [2, 0, 1, 1, 1, 2];
             return words[(count % 100 > 4 && count % 100 < 20) ? 2 : cases[Math.min(count % 10, 5)]];
         }
         
-        // English pluralization
+        // English pluralization: simple singular/plural
         if (this.currentLanguage === 'en') {
             return count === 1 ? words[0] : words[1];
         }
         
-        // Uzbek pluralization
+        // Uzbek pluralization: similar to English
         if (this.currentLanguage === 'uz') {
             return count === 1 ? words[0] : words[1];
         }
