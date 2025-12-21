@@ -2664,7 +2664,7 @@
             // Обновить прогресс
             const progress = ((currentQuestionIndex + 1) / 40) * 100;
             document.getElementById('test-progress').style.width = `${progress}%`;
-            document.getElementById('progress-text').textContent = `Вопрос ${currentQuestionIndex + 1} из 40`;
+            document.getElementById('progress-text').textContent = `${currentQuestionIndex + 1} / 40`;
             
             // Обновить панель навигации
             updateQuestionNav();
@@ -2673,7 +2673,6 @@
             let html = `
                 <div class="question-container">
                     <div class="question-header">
-                        <div class="question-number">Вопрос ${currentQuestionIndex + 1} из 40</div>
                         <div class="question-actions">
                             <button class="question-action-btn mark" onclick="markQuestion()" id="mark-question-btn">
                                 ${markedQuestions[currentQuestionIndex] ? '★ Снять отметку' : '☆ Отметить вопрос'}
