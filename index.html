@@ -1139,6 +1139,7 @@
             <a href="#profile" onclick="showSection('profile')">👤 Профиль</a>
             <a href="#learning" onclick="showSection('learning')">📚 Обучение</a>
             <a href="#contacts" onclick="showSection('contacts')">📞 Контакты</a>
+            <button class="theme-toggle-btn" onclick="toggleTheme()" title="Переключить тему">🌙</button>
             <button class="logout-btn" onclick="logout()">Выйти</button>
         </nav>
 
@@ -2128,6 +2129,30 @@
             }
         }
 
+        // Theme toggle
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            // Update button icon
+            const btn = document.querySelector('.theme-toggle-btn');
+            if (btn) {
+                btn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+        
+        // Load saved theme
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const btn = document.querySelector('.theme-toggle-btn');
+            if (btn) {
+                btn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+        }
+
         // Показать секцию
         function showSection(sectionId) {
             // Скрыть все секции
@@ -3058,6 +3083,9 @@
         window.addEventListener('DOMContentLoaded', () => {
             const currentUser = JSON.parse(localStorage.getItem(CURRENT_USER_KEY));
             
+            // Load theme
+            loadTheme();
+            
             if (currentUser) {
                 showMainContent(currentUser);
             }
@@ -3073,6 +3101,7 @@
     <script src="/js/international.js"></script>
     <script src="/js/gamification.js"></script>
     <script src="/js/mobile-pwa.js"></script>
+    <script src="/js/ai-tutor.js"></script>
     
     <!-- Initialize modules after page load -->
     <script>
@@ -3399,6 +3428,174 @@
                 .achievements-grid {
                     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
                 }
+            }
+            
+            /* AI Tutor Styles */
+            .ai-tutor-modal {
+                width: 100%;
+                max-height: 80vh;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .ai-tutor-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 15px;
+                border-bottom: 2px solid #eee;
+                margin-bottom: 20px;
+            }
+            
+            .ai-tutor-header h3 {
+                margin: 0;
+                color: #667eea;
+            }
+            
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #999;
+                transition: color 0.3s;
+            }
+            
+            .close-btn:hover {
+                color: #333;
+            }
+            
+            .ai-tutor-messages {
+                flex: 1;
+                overflow-y: auto;
+                padding: 20px;
+                background: #f8f9fa;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                max-height: 400px;
+            }
+            
+            .tutor-message {
+                margin-bottom: 15px;
+                padding: 12px 16px;
+                border-radius: 12px;
+                max-width: 80%;
+                animation: fadeInUp 0.3s ease;
+            }
+            
+            .bot-message {
+                background: white;
+                border: 1px solid #e1e1e1;
+                margin-right: auto;
+            }
+            
+            .user-message {
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                margin-left: auto;
+                text-align: right;
+            }
+            
+            .tutor-resources {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #eee;
+                font-size: 14px;
+            }
+            
+            .tutor-resources ul {
+                margin-top: 5px;
+                padding-left: 20px;
+            }
+            
+            .tutor-resources a {
+                color: #667eea;
+                text-decoration: none;
+            }
+            
+            .tutor-resources a:hover {
+                text-decoration: underline;
+            }
+            
+            .typing-indicator {
+                display: flex;
+                gap: 5px;
+                padding: 12px 16px;
+            }
+            
+            .typing-indicator span {
+                width: 8px;
+                height: 8px;
+                background: #999;
+                border-radius: 50%;
+                animation: typingBounce 1.4s infinite;
+            }
+            
+            .typing-indicator span:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+            
+            .typing-indicator span:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+            
+            @keyframes typingBounce {
+                0%, 60%, 100% { transform: translateY(0); }
+                30% { transform: translateY(-10px); }
+            }
+            
+            .ai-tutor-input {
+                display: flex;
+                gap: 10px;
+            }
+            
+            .ai-tutor-input input {
+                flex: 1;
+                padding: 12px 16px;
+                border: 2px solid #e1e1e1;
+                border-radius: 25px;
+                font-size: 14px;
+                transition: border-color 0.3s;
+            }
+            
+            .ai-tutor-input input:focus {
+                outline: none;
+                border-color: #667eea;
+            }
+            
+            .send-btn {
+                padding: 12px 24px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                border-radius: 25px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+            
+            .send-btn:hover {
+                transform: scale(1.05);
+            }
+            
+            .ai-tutor-btn {
+                bottom: 80px !important;
+            }
+            
+            /* Theme Toggle Button */
+            .theme-toggle-btn {
+                background: rgba(255, 255, 255, 0.2);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 8px 16px;
+                border-radius: 20px;
+                cursor: pointer;
+                font-size: 16px;
+                transition: all 0.3s;
+            }
+            
+            .theme-toggle-btn:hover {
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(1.1) rotate(20deg);
             }
         `;
         document.head.appendChild(style);
