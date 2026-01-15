@@ -200,12 +200,15 @@ body::after {
 /* Hero секция - Новый дизайн */
 .landing-hero {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100% !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 100px 40px 60px;
+  padding: 100px 60px 60px;
   position: relative;
   overflow: hidden;
+  margin: 0 !important;
 }
 
 /* Анимированные фоновые элементы */
@@ -1218,6 +1221,11 @@ section {
   max-width: 1200px;
   margin: 0 auto;
   padding: 60px 24px;
+}
+
+section.landing-hero {
+  max-width: 100%;
+  padding: 100px 60px 60px;
 }
 
 /* Типографика */
