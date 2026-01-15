@@ -403,26 +403,7 @@ html {
     50% { border-color: transparent; }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .fade-in-up,
-    .fade-in-down,
-    .fade-in-left,
-    .fade-in-right {
-        transform: translateY(30px);
-    }
-    
-    .fade-in-up.active,
-    .fade-in-down.active,
-    .fade-in-left.active,
-    .fade-in-right.active {
-        transform: translateY(0);
-    }
-    
-    .enhanced-card:hover {
-        transform: translateY(-5px) scale(1.01);
-    }
-}
+/* Мобильная адаптация отключена */
 
 /* Performance Optimizations */
 .scroll-animate,

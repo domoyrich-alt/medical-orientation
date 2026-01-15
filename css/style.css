@@ -39,11 +39,15 @@ a {
 .auth-container {
   position: fixed;
   inset: 0;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
   z-index: 3000;
+}
+
+.auth-container.active {
+  display: flex;
 }
 
 .auth-container.hidden {
@@ -141,6 +145,9 @@ a {
 .main-content {
   display: none;
   min-height: 100vh;
+  position: relative;
+  z-index: 10;
+  background: var(--bg);
 }
 
 .main-content.visible {
@@ -264,10 +271,7 @@ section.visible {
   font-weight: 900;
 }
 
-@media (max-width: 520px) {
-  .auth-form { padding: 22px; }
-  .logout-btn { margin-left: 0; width: 100%; }
-}
+/* Мобильная адаптация отключена */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

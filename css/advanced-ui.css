@@ -253,20 +253,7 @@
 .badge-success { background: var(--color-success); color: white; }
 .badge-warning { background: var(--color-warning); color: white; }
 
-/* ===============================================
-   Responsive Utilities
-   =============================================== */
-@media (max-width: 768px) {
-    .toast-container {
-        right: var(--spacing-sm);
-        left: var(--spacing-sm);
-    }
-    
-    .toast {
-        min-width: auto;
-        width: 100%;
-    }
-}
+/* Мобильная адаптация отключена */
 
 /* ===============================================
    Accessibility
