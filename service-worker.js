@@ -3,14 +3,27 @@
  * Handles offline caching and push notifications
  */
 
-const CACHE_NAME = 'medical-orientation-v1';
+// Bump this value whenever you change static assets so clients don't get stuck
+// on stale cached CSS/JS.
+const CACHE_NAME = 'medical-orientation-v2';
 const urlsToCache = [
     '/',
     '/index.html',
+    '/manifest.json',
+    '/service-worker.js',
+    '/css/style.css',
+    '/css/test-design.css',
+    '/css/smooth-theme.css',
     '/css/advanced-ui.css',
+    '/css/scroll-animations.css',
+    '/css/animations.css',
+    '/css/themes.css',
+    '/css/neon-theme.css',
+    '/js/animations.js',
     '/js/gamification.js',
     '/js/mobile-pwa.js',
     '/js/international.js',
+    '/js/scroll-animations.js',
     'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
@@ -49,39 +62,55 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
+    const req = event.request;
+
+    if (req.method !== 'GET') {
+        return;
+    }
+
+    const url = new URL(req.url);
+    const sameOrigin = url.origin === self.location.origin;
+
+    // Treat CSS/JS as network-first to prevent “stuck on old styles/scripts” after deploys.
+    const isCssOrJs = sameOrigin && (
+        req.destination === 'style' ||
+        req.destination === 'script' ||
+        url.pathname.endsWith('.css') ||
+        url.pathname.endsWith('.js')
+    );
+
+    // Navigations should also be network-first (fresh app shell), with offline fallback.
+    const isNavigation = req.mode === 'navigate';
+
+    if (isCssOrJs || isNavigation) {
+        event.respondWith(
+            fetch(req)
+                .then((res) => {
+                    if (sameOrigin && res && res.status === 200) {
+                        const resToCache = res.clone();
+                        caches.open(CACHE_NAME).then((cache) => cache.put(req, resToCache));
+                    }
+                    return res;
+                })
+                .catch(() => {
+                    if (isNavigation) return caches.match('/index.html');
+                    return caches.match(req);
+                })
+        );
+        return;
+    }
+
+    // Default: cache-first for other requests.
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-
-                // Clone the request
-                const fetchRequest = event.request.clone();
-
-                return fetch(fetchRequest).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-
-                    // Clone the response
-                    const responseToCache = response.clone();
-
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-
-                    return response;
-                }).catch(() => {
-                    // Return offline page for navigation requests
-                    if (event.request.mode === 'navigate') {
-                        return caches.match('/index.html');
-                    }
-                });
-            })
+        caches.match(req).then((cached) => {
+            if (cached) return cached;
+            return fetch(req).then((res) => {
+                if (!sameOrigin || !res || res.status !== 200) return res;
+                const resToCache = res.clone();
+                caches.open(CACHE_NAME).then((cache) => cache.put(req, resToCache));
+                return res;
+            });
+        })
     );
 });
 

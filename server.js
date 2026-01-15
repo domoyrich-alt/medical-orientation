@@ -8,11 +8,13 @@ const path = require('path');
 const fs = require('fs');
 
 const app = express();
-const port = 5000;
+const port = process.env.PORT ? Number(process.env.PORT) : 5000;
 const secretKey = 'your-secret-key'; // Change this to a secure key in production
 
 app.use(cors());
 app.use(bodyParser.json());
+// Serve the static frontend (index.html, css/, js/, manifest, service-worker.js, etc.)
+app.use(express.static(__dirname));
 app.use('/uploads', express.static('uploads')); // Serve uploaded avatars
 
 // In-memory storage (replace with database in production)
