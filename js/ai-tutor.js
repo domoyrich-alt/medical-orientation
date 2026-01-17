@@ -147,10 +147,7 @@ class AITutor {
         // Default response
         return {
             answer: "Спасибо за ваш вопрос! Я помогу вам разобраться. Пожалуйста, уточните, какой именно аспект медицины или обучения вас интересует? Я могу рассказать об анатомии, физиологии, медицинских специальностях, поступлении в вуз или методах эффективного обучения.",
-            resources: [
-                { title: "Начните с тестов", url: "#tests" },
-                { title: "Обучающие материалы", url: "#learning" }
-            ]
+            resources: []
         };
     }
 
@@ -294,6 +291,27 @@ class AITutor {
         // Only add if not already present
         if (!document.querySelector('.ai-tutor-btn')) {
             document.body.appendChild(chatBtn);
+        }
+        
+        // Hide on landing page (for not logged in users)
+        this.updateTutorVisibility();
+    }
+    
+    /**
+     * Update tutor button visibility based on login state
+     */
+    updateTutorVisibility() {
+        const tutorBtn = document.querySelector('.ai-tutor-btn');
+        if (!tutorBtn) return;
+        
+        const landingPage = document.getElementById('landing-page');
+        const mainContent = document.getElementById('main-content');
+        
+        // Hide if landing page is visible (user not logged in)
+        if (landingPage && landingPage.style.display !== 'none') {
+            tutorBtn.style.display = 'none';
+        } else if (mainContent && mainContent.style.display !== 'none') {
+            tutorBtn.style.display = 'flex';
         }
     }
 
@@ -442,9 +460,17 @@ class AITutor {
     }
 }
 
-// Initialize global instance
+// Initialize global instance after DOM is ready
 if (typeof window !== 'undefined') {
-    window.aiTutor = new AITutor();
+    // Wait for DOM to be fully loaded before initializing
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            window.aiTutor = new AITutor();
+        });
+    } else {
+        // DOM already loaded
+        window.aiTutor = new AITutor();
+    }
 }
 
 // Export for use in other modules

@@ -395,6 +395,143 @@ body::after {
   border-radius: 14px;
 }
 
+/* ============================================================
+   HOW IT WORKS DROPDOWN - Красивый выпадающий список
+   ============================================================ */
+.how-it-works-dropdown {
+  position: relative;
+}
+
+.how-it-works-dropdown .hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s var(--ease);
+}
+
+.how-it-works-dropdown.active .dropdown-arrow {
+  transform: rotate(180deg);
+}
+
+.how-it-works-list {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 340px;
+  background: rgba(15, 15, 15, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-10px) scale(0.95);
+  transition: all 0.4s var(--ease);
+  z-index: 100;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+}
+
+.how-it-works-dropdown.active .how-it-works-list {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.how-it-works-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.how-it-works-dropdown.active .how-it-works-item {
+  opacity: 1;
+  transform: translateX(0);
+  animation: slideInItem 0.4s var(--ease) calc(var(--delay) * 0.08s) both;
+}
+
+@keyframes slideInItem {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.how-it-works-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.how-item-number {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--gradient-1), var(--gradient-2));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: white;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(121, 40, 202, 0.4);
+}
+
+.how-item-content {
+  flex: 1;
+}
+
+.how-item-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.how-item-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Треугольник-указатель */
+.how-it-works-list::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 10px solid rgba(255, 255, 255, 0.1);
+}
+
+.how-it-works-list::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid rgba(15, 15, 15, 0.95);
+}
+
 /* Статистика */
 .hero-stats {
   display: flex;
@@ -1421,6 +1558,30 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--text);
   color: var(--bg);
   border-color: var(--text);
+}
+
+/* Стили для кнопок классов */
+.grade-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.grade-btn {
+  min-width: 90px;
+  padding: 10px 14px;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+  .grade-filter {
+    gap: 6px;
+  }
+  .grade-btn {
+    min-width: 70px;
+    padding: 8px 10px;
+    font-size: 0.75rem;
+  }
 }
 
 /* ============================================================
